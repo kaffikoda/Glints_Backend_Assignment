@@ -8,13 +8,20 @@ class searialization_class(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class searialization_class1(serializers.ModelSerializer):
+class searialize_rest_detail(serializers.ModelSerializer):
     class Meta:
         model = RestaurantDetail
         fields = '__all__'
 
 
-class searialization_class2(serializers.ModelSerializer):
+class searialize_rest_timingss(serializers.ModelSerializer):
     class Meta:
         model = RestTimingss
-        fields = '__all__'
+        fields = ['restaurant_id']
+        # fields = '__all__'
+
+# class searialize_rest_timingss(serializers.ModelSerializer):
+#     class Meta:
+#         model = RestaurantDetail
+        # fields = ['restaurant_id', 'restaurant_name']
+        # fields = '__all__'
