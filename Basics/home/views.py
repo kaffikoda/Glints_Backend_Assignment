@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse
+from .models import CustomerDetails
 
 
 # Create your views here.
@@ -18,4 +19,7 @@ def services(request):
 
 
 def contacts(request):
-    return HttpResponse("This is contacts page!!!!!!!!!")
+    posts = CustomerDetails.objects.all()
+    print(posts)
+    return render(request, 'contacts.html', {'post':posts})
+    # return HttpResponse("This is contacts page!!!!!!!!!")

@@ -3,8 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7ea50120-dc35-4289-8b0a-aceb7bb6764c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/Basics/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/Basics/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Basics/Basics/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/Basics/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/home/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/home/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Basics/home/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/home/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,8 +17,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -33,6 +36,15 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Nikhil Kumar\PycharmProjects\Basic_Django\Basics\home" />
+      <recent name="C:\Users\Nikhil Kumar\PycharmProjects\Basic_Django\Basics" />
+      <recent name="C:\Users\Nikhil Kumar\PycharmProjects\Basic_Django\Basics\home\migrations" />
+      <recent name="C:\Users\Nikhil Kumar\PycharmProjects\Basic_Django\Basics\static" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="settings" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -108,5 +120,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1899" height="279" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1619080588908" />
+    <state x="461" y="163" key="SettingsEditor" timestamp="1619089603390">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="461" y="163" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1619089603390" />
   </component>
 </project>
