@@ -62,10 +62,11 @@ def show_restaurants(request1, request2, request3, request4):
         return Response(serialize2.data)
         # return Response(temp.data)
         # return Response(json.dumps(json.JSONDecoder().decode(temp)))
+        # return Response(rest_det.values('restaurant_name'))
 
 
 @api_view(['GET'])
-def show_top_restaurants(request1, request2, request3, request4, request5, request6, request7):
+def show_top_restaurants1(request1, request2, request3, request4, request5, request6, request7):
     # print(request1)
     # print(request2)  #y
     # print(request3)  #x
@@ -77,7 +78,7 @@ def show_top_restaurants(request1, request2, request3, request4, request5, reque
 
     if request1.method == 'GET':
         menu_object = (MenuDetails.objects.filter(menu_price__gte=request4) & MenuDetails.objects.filter(menu_price__lte=request6)).values('restaurant').annotate(total=Count('dish_name')).filter(total__gt=request3)
-        rest_det = RestaurantDetail.objects.filter(restaurant_id__in=menu_object.values('restaurant'))
+        rest_det = (RestaurantDetail.objects.filter(restaurant_id__in=menu_object.values('restaurant'))).order_by('-cash_balance')[:int(request2)]
         ser = searialize_rest_detail(rest_det, many=True)
         # menu_object = MenuDetails.objects.filter(menu_price__gte=request4) & MenuDetails.objects.filter(menu_price__lte=request6)
         # print(menu_object)
@@ -88,15 +89,14 @@ def show_top_restaurants(request1, request2, request3, request4, request5, reque
         # return Response(menu_object.values('restaurant'))
         # return HttpResponse("Show top restaurants page!!!!")
         return Response(ser.data)
-        # return Response(rest_det)
+        # return Response(rest_det.values('restaurant_name'))
 
 
+@api_view(['GET'])
+def show_top_restaurants2(request1, request2, request3, request4, request5, request6, request7):
 
+    if request1.method == 'GET':
+        menu_object = (MenuDetails.objects.filter(menu_price__gte=request4) & MenuDetails.objects.filter(menu_price__lte=request6)).values('restaurant').annotate(total=Count('dish_name')).filter(total__lt=request3)
+        rest_det = (RestaurantDetail.objects.filter(restaurant_id__in=menu_object.values('restaurant'))).order_by('-cash_balance')[:int(request2)]
+        return Response(rest_det.values('restaurant_name'))
 
-
-# /([0-6])/(([01]\d|2[0-3]):[0-5]\d)
-
-
-# def display_data(request):
-#     call_api = 0
-#     return render(request, 'contacts.html')
