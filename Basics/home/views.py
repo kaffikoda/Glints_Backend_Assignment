@@ -1,9 +1,10 @@
 from django.shortcuts import render, HttpResponse
 from .models import CustomerDetails
-from .serialization import searialization_class, searialize_rest_detail, searialize_rest_timingss
-from .models import CustomerDetails, RestaurantDetail, RestTimingss
+from .serialization import searialization_class, searialize_rest_detail, searialize_rest_timingss, searialize_menu_details
+from .models import CustomerDetails, RestaurantDetail, RestTimingss, MenuDetails
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.db.models import Count
 import json
 from django.contrib.auth.models import User
 
@@ -43,15 +44,16 @@ def show_customer_details(request):
 def show_restaurants(request1, request2, request3, request4):
     if request1.method == 'GET':
         # query_set = 0
-        open_restaurants = (RestTimingss.objects.filter(day_num=request2) & RestTimingss.objects.filter(opening_time__lte=request3) & RestTimingss.objects.filter(closing_time__gte=request3)).prefetch_related('restaurant')
-        # serialize2 = searialize_rest_detail(searialize_rest_timingss(open_restaurants, many=True), many=True)
-        serialize2 = searialize_rest_timingss(open_restaurants, many=True)
+        open_restaurants = RestTimingss.objects.filter(day_num=request2) & RestTimingss.objects.filter(opening_time__lte=request3) & RestTimingss.objects.filter(closing_time__gte=request3)
+        rest_det = RestaurantDetail.objects.filter(restaurant_id__in=open_restaurants.values('restaurant'))
+        # serialize3 = searialize_rest_timingss(open_restaurants, many=True)
+        serialize2 = searialize_rest_detail(rest_det, many=True)
         # final_serialize = searialize_rest_detail(serialize2.data, many=True)
         # print(type(serialize2))
-        temp = []
-
-        for it in open_restaurants:
-            temp.append(it.restaurant.restaurant_name)
+        # temp = []
+        #
+        # for it in open_restaurants:
+        #     temp.append(it.restaurant.restaurant_name)
             # temp.append(searialize_rest_timingss(it.restaurant.restaurant_name, many=True))
         # print(type(open_restaurants))
         # print(str(open_restaurants.query))
@@ -64,14 +66,31 @@ def show_restaurants(request1, request2, request3, request4):
 
 @api_view(['GET'])
 def show_top_restaurants(request1, request2, request3, request4, request5, request6, request7):
-    print(request1)
-    print(request2)  #y
-    print(request3)  #x
-    print(request4)  #start
-    print(request5)
-    print(request6)  #end
-    print(request7)
-    return HttpResponse("Show top restaurants page!!!!")
+    # print(request1)
+    # print(request2)  #y
+    # print(request3)  #x
+    # print(request4)  #start
+    # print(request5)
+    # print(request6)  #end
+    # print(request7)
+    # return HttpResponse("Show top restaurants page!!!!")
+
+    if request1.method == 'GET':
+        menu_object = (MenuDetails.objects.filter(menu_price__gte=request4) & MenuDetails.objects.filter(menu_price__lte=request6)).values('restaurant').annotate(total=Count('dish_name')).filter(total__gt=request3)
+        rest_det = RestaurantDetail.objects.filter(restaurant_id__in=menu_object.values('restaurant'))
+        ser = searialize_rest_detail(rest_det, many=True)
+        # menu_object = MenuDetails.objects.filter(menu_price__gte=request4) & MenuDetails.objects.filter(menu_price__lte=request6)
+        # print(menu_object)
+        # serialize = searialize_menu_details(menu_object, many=True)
+        # return Response(serialize.data)
+        # print(type(menu_object.values('restaurant')))
+        # return Response(menu_object)
+        # return Response(menu_object.values('restaurant'))
+        # return HttpResponse("Show top restaurants page!!!!")
+        return Response(ser.data)
+        # return Response(rest_det)
+
+
 
 
 

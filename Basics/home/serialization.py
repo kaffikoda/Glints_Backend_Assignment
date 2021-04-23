@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomerDetails, RestaurantDetail, RestTimingss
+from .models import CustomerDetails, RestaurantDetail, RestTimingss, MenuDetails
 
 
 class searialization_class(serializers.ModelSerializer):
@@ -11,7 +11,8 @@ class searialization_class(serializers.ModelSerializer):
 class searialize_rest_detail(serializers.ModelSerializer):
     class Meta:
         model = RestaurantDetail
-        fields = '__all__'
+        fields = ['restaurant_name']
+        # fields = '__all__'
 
 
 class searialize_rest_timingss(serializers.ModelSerializer):
@@ -19,6 +20,12 @@ class searialize_rest_timingss(serializers.ModelSerializer):
         model = RestTimingss
         fields = ['restaurant_id']
         # fields = '__all__'
+
+class searialize_menu_details(serializers.ModelSerializer):
+    class Meta:
+        model = MenuDetails
+        fields = '__all__'
+        # fields = ['restaurant_id']
 
 # class searialize_rest_timingss(serializers.ModelSerializer):
 #     class Meta:
