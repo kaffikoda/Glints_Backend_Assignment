@@ -62,6 +62,18 @@ def show_restaurants(request1, request2, request3, request4):
         # return Response(json.dumps(json.JSONDecoder().decode(temp)))
 
 
+@api_view(['GET'])
+def show_top_restaurants(request1, request2, request3, request4, request5, request6, request7):
+    print(request1)
+    print(request2)  #y
+    print(request3)  #x
+    print(request4)  #start
+    print(request5)
+    print(request6)  #end
+    print(request7)
+    return HttpResponse("Show top restaurants page!!!!")
+
+
 
 # /([0-6])/(([01]\d|2[0-3]):[0-5]\d)
 

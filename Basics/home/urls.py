@@ -24,5 +24,6 @@ urlpatterns = [
     path("contacts", v1.contacts, name='contacts'),
     path("show", v1.show_customer_details, name='show_customer'),
     # path("show_restaurants", v1.show_restaurants, name='show_restaurants')
-    re_path(r'^show_restaurants/([0-6])/(([01]\d|2[0-3]):?[0-5]\d)', v1.show_restaurants, name='show_restaurants')
+    re_path(r'^show_restaurants/([0-6])/(([01]\d|2[0-3]):?[0-5]\d)', v1.show_restaurants, name='show_restaurants'),
+    re_path(r'^show_top_restaurants/([0-9]+)/([0-9]+)/([0-9]+(\.[0-9]{1,2}))-([0-9]+(\.[0-9]{1,2}))', v1.show_top_restaurants, name='show_restaurants')
 ]

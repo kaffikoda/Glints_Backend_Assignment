@@ -34,3 +34,14 @@ class RestTimingss(models.Model):
     class Meta:
         managed = False
         db_table = 'rest_timingss'
+
+
+class MenuDetails(models.Model):
+    menu_id = models.AutoField(primary_key=True)
+    restaurant = models.ForeignKey('RestaurantDetail', models.DO_NOTHING)
+    dish_name = models.CharField(max_length=1000, blank=True, null=True)
+    menu_price = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'menu_details'
