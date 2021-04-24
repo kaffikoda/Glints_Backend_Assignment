@@ -27,6 +27,11 @@ class searialize_menu_details(serializers.ModelSerializer):
         fields = '__all__'
         # fields = ['restaurant_id']
 
+
+# class ser_class_det(serializers.ModelSerializer):
+#     class Meta:
+#         model = Class
+
 # class searialize_rest_timingss(serializers.ModelSerializer):
 #     class Meta:
 #         model = RestaurantDetail
