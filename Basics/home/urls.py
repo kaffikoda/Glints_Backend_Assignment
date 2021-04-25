@@ -15,17 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-from home import views as v1
+from home import views as view1
 
 urlpatterns = [
-    path("", v1.index, name='home'),
-    path("about", v1.about, name='about'),
-    path("services", v1.services, name='services'),
-    path("contacts", v1.contacts, name='contacts'),
-    path("show", v1.show_customer_details, name='show_customer'),
-    path("restaurants", v1.show_restaurants, name='show_restaurants'),
-    path("top_restaurants", v1.top_restaurants, name='show_restaurants'),
-    path("relevant_restaurants", v1.relevant_restaurants, name="relevant_restaurants"),
-    path("relevant_dishes", v1.relevant_dishes, name="relevant_dishes"),
-    path("place_order", v1.place_order, name='place_order')
+    # path("", view1.index, name='home'),
+    path("about", view1.about, name='about'),
+    path("services", view1.services, name='services'),
+    path("contacts", view1.contacts, name='contacts'),
+    path("show", view1.show_customer_details, name='show_customer'),
+    path("restaurants", view1.restaurants, name='show_restaurants'),
+    path("relevant_restaurants", view1.relevant_restaurants, name="relevant_restaurants"),
+    path("relevant_dishes", view1.relevant_dishes, name="relevant_dishes"),
+    path("place_order", view1.place_order, name='place_order')
 ]
