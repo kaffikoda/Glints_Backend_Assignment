@@ -83,9 +83,6 @@ class CustomerDetails(models.Model):
         managed = False
         db_table = 'customer_details'
 
-    # def __str__(self):
-    #     return self.customer_name
-
 
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
@@ -131,15 +128,37 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
+class DjangoSite(models.Model):
+    domain = models.CharField(unique=True, max_length=100)
+    name = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'django_site'
+
+
 class MenuDetails(models.Model):
     menu_id = models.AutoField(primary_key=True)
     restaurant = models.ForeignKey('RestaurantDetail', models.DO_NOTHING)
-    dish_name = models.CharField(max_length=1000, blank=True, null=True)
+    dish_name = models.CharField(max_length=1000)
     menu_price = models.FloatField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'menu_details'
+
+
+class PurchaseHistory(models.Model):
+    transaction_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(CustomerDetails, models.DO_NOTHING)
+    dish_name = models.CharField(max_length=1000, blank=True, null=True)
+    restaurant_name = models.CharField(max_length=255, blank=True, null=True)
+    transaction_amount = models.FloatField(blank=True, null=True)
+    transaction_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'purchase_history'
 
 
 class RestTimings(models.Model):

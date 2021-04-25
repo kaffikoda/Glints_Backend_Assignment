@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse
 from .models import CustomerDetails
 from .serialization import searialization_class, searialize_rest_detail, searialize_rest_timingss, \
     searialize_menu_details
-from .models import CustomerDetails, RestaurantDetail, RestTimingss, MenuDetails
+from .models import CustomerDetails, RestaurantDetail, RestTimingss, MenuDetails, PurchaseHistory
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, renderer_classes
 from django.db.models import Count, Max
@@ -12,6 +12,29 @@ from django.db import connection
 import pymysql
 import json
 from django.contrib.auth.models import User
+
+
+def calculate_edit_distance(search_str, result_str):
+    search_str, result_str = search_str.lower(), result_str.lower()
+    length_of_search_str = len(search_str)
+    length_of_result_str = len(result_str)
+
+    dp_array = [[0 for x in range(0, length_of_search_str + 1)] for y in range(0, length_of_result_str + 1)]
+
+    for i in range(0, length_of_search_str + 1):
+        dp_array[0][i] = i
+
+    for j in range(0, length_of_result_str + 1):
+        dp_array[j][0] = j
+
+    for i in range(1, length_of_result_str + 1):
+        for j in range(1, length_of_search_str + 1):
+            if result_str[i - 1] != search_str[j - 1]:
+                dp_array[i][j] = min(dp_array[i - 1][j], dp_array[i][j - 1], dp_array[i - 1][j - 1]) + 1
+            else:
+                dp_array[i][j] = dp_array[i - 1][j - 1]
+
+    return dp_array[length_of_result_str][length_of_search_str]
 
 
 # Create your views here.
@@ -49,17 +72,9 @@ def show_customer_details(request):
 
 @api_view(['GET'])
 def show_restaurants(request1):
-    # , request2, request3, request4
-    print(request1.query_params)
-    # datetime_str = request1.GET.get('datetime')
-    # day_index = datetime.strptime(datetime_str, "%d-%m-%Y %H:%M").weekday()
-    # time = datetime.strptime(datetime_str, "%d-%m-%Y %H:%M").time()
-    # print(day_index, time)
-
-    # return HttpResponse("Show Restaurants!!!!!")
+    # print(request1.query_params)
 
     if request1.method == 'GET' and request1.GET.get('top') is None:
-        # query_set = 0
         datetime_str = request1.GET.get('datetime')
         day_index = datetime.strptime(datetime_str, "%d-%m-%Y %H:%M").weekday()
         time = datetime.strptime(datetime_str, "%d-%m-%Y %H:%M").time()
@@ -102,10 +117,8 @@ def show_restaurants(request1):
 
 @api_view(['GET'])
 def top_restaurants(request1):
-    print(request1.query_params)
+    # print(request1.query_params)
     price_range_list = request1.GET.get('price_range').split('-')
-    # print(request1.GET.get('lesser_than'))
-    # return HttpResponse("Show Top Restaurants!!!!!!!!!!")
     if request1.method == 'GET' and request1.GET.get('greater_than') is not None:
         num_of_top_restaurants = int(request1.GET.get('top'))
         dishes_threshold = int(request1.GET.get('greater_than'))
@@ -135,32 +148,49 @@ def top_restaurants(request1):
         return Response(rest_det.values('restaurant_name'))
 
 
-# @api_view(['GET'])
-# def show_top_restaurants1(request1, request2, request3, request4, request5, request6, request7):
-#     if request1.method == 'GET':
-#         menu_object = (MenuDetails.objects.filter(menu_price__gte=request4) & MenuDetails.objects.filter(
-#             menu_price__lte=request6)).values('restaurant').annotate(total=Count('dish_name')).filter(
-#             total__gt=request3)
-#         rest_det = (RestaurantDetail.objects.filter(restaurant_id__in=menu_object.values('restaurant'))).order_by(
-#             '-cash_balance')[:int(request2)]
-#         ser = searialize_rest_detail(rest_det, many=True)
-#         return Response(rest_det.values('restaurant_name'))
+@api_view(['GET'])
+def relevant_restaurants(request):
+    restaurant_name = request.GET.get('name')
+    query_parameter = "%" + restaurant_name + "%"
+    if request.method == 'GET':
+        raw_sql_query = RestaurantDetail.objects.raw(
+            'SELECT restaurant_id, restaurant_name FROM restaurant_detail WHERE restaurant_name LIKE %s',
+            [query_parameter])
+
+        edit_distance_dict = {}
+
+        for record in raw_sql_query:
+            edit_distance = calculate_edit_distance(restaurant_name, record.restaurant_name)
+            edit_distance_dict[record.restaurant_name] = edit_distance
+
+        final_dict = dict(sorted(edit_distance_dict.items(), key=lambda x: x[1]))
+        # print(final_dict)
+
+        return Response(final_dict.keys())
 
 
-# @api_view(['GET'])
-# def show_top_restaurants2(request1, request2, request3, request4, request5, request6, request7):
-#     if request1.method == 'GET':
-#         menu_object = (MenuDetails.objects.filter(menu_price__gte=request4) & MenuDetails.objects.filter(
-#             menu_price__lte=request6)).values('restaurant').annotate(total=Count('dish_name')).filter(
-#             total__lt=request3)
-#         rest_det = (RestaurantDetail.objects.filter(restaurant_id__in=menu_object.values('restaurant'))).order_by(
-#             '-cash_balance')[:int(request2)]
-#         return Response(rest_det.values('restaurant_name'))
+@api_view(['GET'])
+def relevant_dishes(request):
+    dish_name = request.GET.get('name')
+    query_parameter = "%" + dish_name + "%"
+    # print(par)
+    if request.method == 'GET':
+        raw_sql_query = MenuDetails.objects.raw(
+            'SELECT DISTINCT(dish_name), menu_id FROM menu_details WHERE dish_name LIKE %s', [query_parameter])
+
+        edit_distance_dict = {}
+
+        for record in raw_sql_query:
+            edit_distance = calculate_edit_distance(dish_name, record.dish_name)
+            edit_distance_dict[record.dish_name] = edit_distance
+
+        final_dict = dict(sorted(edit_distance_dict.items(), key=lambda x: x[1]))
+
+        return Response(final_dict.keys())
 
 
 @api_view(['GET', 'POST'])
 def place_order(request):
-    # print(request.query_params)
     if request.method == 'GET':
         user_id = int(request.GET.get('user_id'))
         dish_name = request.GET.get('dish_name')
@@ -169,53 +199,35 @@ def place_order(request):
         restaurant_details_query = RestaurantDetail.objects.filter(restaurant_name=restaurant_name)
         dish_and_restaurant_query = MenuDetails.objects.filter(dish_name=dish_name) & MenuDetails.objects.filter(
             restaurant__in=restaurant_details_query.values('restaurant_id'))
-        # print(restaurant_details_query)
-        # print(dish_and_restaurant_query.values('menu_price'))
-        # print(type(user_info_query.values('cash_balance')))
-        #
-        # print(len(CustomerDetails.objects.filter(cash_balance__gte=dish_and_restaurant_query.values('menu_price')) & user_info_query))
-        # return HttpResponse("Hellllllllllo")
 
         if len(user_info_query) == 1 and len(dish_and_restaurant_query) == 1:
-            if len(CustomerDetails.objects.filter(cash_balance__gte=dish_and_restaurant_query.values('menu_price')) & user_info_query) == 1:
+            if len(CustomerDetails.objects.filter(
+                    cash_balance__gte=dish_and_restaurant_query.values('menu_price')) & user_info_query) == 1:
                 try:
                     with transaction.atomic():
-                        # print("HElllll")
                         user_details = CustomerDetails.objects.get(customer_id=user_id)
                         restaurant_details = RestaurantDetail.objects.get(restaurant_name=restaurant_name)
-                        dish_and_restaurant_details = MenuDetails.objects.get(dis_name=dish_name, restaurant_id=restaurant_details.restaurant_id)
-                        transaction_datetime_str = datetime.now().strptime('%Y-%m-%d %H:%M')
+                        dish_and_restaurant_details = MenuDetails.objects.get(dish_name=dish_name,
+                                                                              restaurant=restaurant_details.restaurant_id)
+
+                        transaction_datetime_str = datetime.now().strftime('%Y-%m-%d %H:%M')
                         transaction_datetime = datetime.strptime(transaction_datetime_str, '%Y-%m-%d %H:%M')
 
-                        print("HEGRHTH:- ", user_details.customer_id)
-
-                        # dt = CustomerDetails.objects.get(customer_id=1000)
-                        # dt.cash_balance = dt.cash_balance + 50
-                        # dt.save(update_fields=['cash_balance'])
-                        # dt.save()
-                        return Response("Transaction successsfulll!!!!!")
+                        user_details.cash_balance -= dish_and_restaurant_details.menu_price
+                        restaurant_details.cash_balance += dish_and_restaurant_details.menu_price
+                        new_transaction_record = PurchaseHistory.objects.create(customer_id=user_id,
+                                                                                dish_name=dish_name,
+                                                                                restaurant_name=restaurant_name,
+                                                                                transaction_amount=dish_and_restaurant_details.menu_price,
+                                                                                transaction_date=transaction_datetime)
+                        # print("*******", new_transaction_record.transaction_id)
+                        user_details.save(update_fields=['cash_balance'])
+                        restaurant_details.save(update_fields=['cash_balance'])
+                        user_details.save()
+                        restaurant_details.save()
+                        new_transaction_record.save()
+                        return Response("Transaction successful")
                 except:
                     return Response("Transaction unsuccessful!!!!!!")
             return Response("Insufficient Cash Balance!!!!!!!!")
-        return Response("Wrong request!!!!!!!!!")
-
-        # return HttpResponse("Bahooot badhiyaaaaaaaaa!!!!")
-
-# @api_view(['GET', 'POST'])
-# # @transaction.atomic()
-# def add_name(request):
-#     name_of_record = request.GET.get('name')
-#     if request.method == 'GET':
-#         print(request.query_params)
-#         # return HttpResponse("Hello world!!!!!!!!")
-#         # return Response("Hellllllllllll")
-#         # with transaction.commit():
-#         try:
-#             with transaction.atomic():
-#                 det = CustomerDetails(1000, customer_name=name_of_record, cash_balance=50.00)
-#                 det.save()
-#                 return Response("Record added!!!!!!!!!!!!")
-#         except:
-#             return Response("Record can't be added!!!!!!!!!")
-#         # print(CustomerDetails.objects.aggregate(Max('customer_id')))
-#         # return Response("Record added!!!!!")
+        return Response("The dish!!!!!!!!!")

@@ -45,3 +45,16 @@ class MenuDetails(models.Model):
     class Meta:
         managed = False
         db_table = 'menu_details'
+
+
+class PurchaseHistory(models.Model):
+    transaction_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey(CustomerDetails, models.DO_NOTHING)
+    dish_name = models.CharField(max_length=1000, blank=True, null=True)
+    restaurant_name = models.CharField(max_length=255, blank=True, null=True)
+    transaction_amount = models.FloatField(blank=True, null=True)
+    transaction_date = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'purchase_history'
