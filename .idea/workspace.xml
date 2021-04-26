@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7ea50120-dc35-4289-8b0a-aceb7bb6764c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Basics/home/serialization.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/home/serialization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Basics/home/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/home/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Basics/home/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/home/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/.env" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/.env.example" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/Basics/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/Basics/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/Procfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Basics/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Basics/runtime.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,7 +25,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Basics" />
   </component>
   <component name="ProjectId" id="1rVuXytK6b2BNFsAOAN03Ge8lW2" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -44,7 +48,7 @@
       <recent name="C:\Users\Nikhil Kumar\PycharmProjects\Basic_Django\Basics\static" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.settings">
     <configuration name="settings" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Basic_Django" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -89,8 +93,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test" />
         <item itemvalue="Python.settings" />
+        <item itemvalue="Python.test" />
       </list>
     </recent_temporary>
   </component>
@@ -119,34 +123,38 @@
     </task>
     <servers />
   </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.env" />
+    <option featureType="com.intellij.fileTypeFactory" implementationName="requirements.txt" />
+  </component>
   <component name="WindowStateProjectService">
-    <state x="878" y="447" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1619080413477">
+    <state x="878" y="447" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1619472997950">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="878" y="447" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1619080413477" />
-    <state width="1899" height="279" key="GridCell.Tab.0.bottom" timestamp="1619166149343">
+    <state x="878" y="447" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1619472997950" />
+    <state width="1899" height="279" key="GridCell.Tab.0.bottom" timestamp="1619455654585">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1619166149343" />
-    <state width="1899" height="279" key="GridCell.Tab.0.center" timestamp="1619166149343">
+    <state width="1899" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1619455654585" />
+    <state width="1899" height="279" key="GridCell.Tab.0.center" timestamp="1619455654584">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="279" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1619166149343" />
-    <state width="1899" height="279" key="GridCell.Tab.0.left" timestamp="1619166149343">
+    <state width="1899" height="279" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1619455654584" />
+    <state width="1899" height="279" key="GridCell.Tab.0.left" timestamp="1619455654583">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="279" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1619166149343" />
-    <state width="1899" height="279" key="GridCell.Tab.0.right" timestamp="1619166149343">
+    <state width="1899" height="279" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1619455654583" />
+    <state width="1899" height="279" key="GridCell.Tab.0.right" timestamp="1619455654584">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1899" height="279" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1619166149343" />
-    <state x="461" y="163" key="SettingsEditor" timestamp="1619346098901">
+    <state width="1899" height="279" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1619455654584" />
+    <state x="461" y="163" key="SettingsEditor" timestamp="1619455688085">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="461" y="163" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1619346098901" />
-    <state x="656" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1619334806501">
+    <state x="461" y="163" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1619455688085" />
+    <state x="656" y="345" key="com.intellij.ide.util.TipDialog" timestamp="1619455689778">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="656" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1619334806501" />
+    <state x="656" y="345" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1619455689778" />
   </component>
 </project>

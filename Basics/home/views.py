@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse
-from .serialization import searialize_restaurant_detail
+from .serialization import searialize_restaurant_detail, serializing
 from .models import CustomerDetails, RestaurantDetail, RestTimingss, MenuDetails, PurchaseHistory
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -35,8 +35,8 @@ def calculate_edit_distance(search_str, result_str):
 def index(request):
     # print(request)
     context = {"variable": "var is the value"}
-    return render(request, 'index.html', context)
-    # return HttpResponse("This is the home page!!!!!")
+    # return render(request, 'index.html', context)
+    return HttpResponse("This is the home page!!!!!")
 
 
 def about(request):
@@ -54,11 +54,14 @@ def contacts(request):
     # return HttpResponse("This is contacts page!!!!!!!!!")
 
 
-@api_view(['GET'])
-def show_customer_details(request):
-    print(request.query_params)
-    return HttpResponse('This is show customer details!!!!!!')
-    # if request.method == 'GET':
+# @api_view(['GET'])
+# def show_customer_details(request):
+#     print(request.query_params)
+#     # return HttpResponse('This is show customer details!!!!!!')
+#     if request.method == 'GET':
+#         obj = PurchaseHistory.objects.all()
+#         ser = serializing(obj, many=True)
+#         return Response(ser.data)
     #     results = CustomerDetails.objects.all()
     #     serialize = searialization_class(results, many=True)
     #     return Response(serialize.data)
@@ -219,3 +222,7 @@ def place_order(request):  # this helps in placing the order
             # dish's price
         return Response("The dish is not present in the restaurant!")  # returned when the dish is not present in the
         # restaurant
+
+# @api_view(['GET'])
+# def show_purchase_history:
+

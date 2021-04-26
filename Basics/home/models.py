@@ -11,8 +11,6 @@ class CustomerDetails(models.Model):
         managed = False
         db_table = 'customer_details'
 
-    # def __str__(self):
-    #     return self.customer_name
 
 
 class RestaurantDetail(models.Model):
