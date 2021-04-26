@@ -4,7 +4,8 @@
 First of all fill the required detail in the **.env** file as instructed. The packages used for running these scripts are mentioned in the **requirements.txt** file, install them in your environment before running running the scripts.
 
 - For searching the names of restaurants on a particular datetime you need to enter the url as
-**restaurants?datetime=dd-mm-yyyy H:M"**. Thing to remember is that there should be a space between the date and time.
+**restaurants?datetime=dd-mm-yyyy H:M**. Time needs to be entered in **24hrs** format and date should be entered in **dd-mm-yyyy** format
+one more thing to remember is that there should be a space between the date and time.
 
 - For getting the top **y** restaurants which has greater than or less than **x** dishes in a given price range.
 There are two types of urls that can written to get the results. First one is:- **restaurants?top=y&greater_than=x&price_range=lower_price-higher_price**. 
