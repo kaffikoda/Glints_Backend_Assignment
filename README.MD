@@ -1,7 +1,7 @@
 **Approach for running the python scripts:-**
 -
 
-First of all fill the required detail in the **.env** file as instructed. The packages used for running these scripts are mentioned in the **requirements.txt** file, install them in your environment before running running the scripts.
+First of all fill the required detail in the **.env** in etl_scripts folder file as instructed. The packages used for running these scripts are mentioned in the **requirements.txt** file, install them in your environment before running running the scripts.
 I have used **MySQL 8.0.17** as a relational database.
 
 - First run the **create_database.py** file. The work of this script is to create a database. Command to run this script:- **python create_database.py**
@@ -13,7 +13,7 @@ I have used **MySQL 8.0.17** as a relational database.
 **Methods for making the api calls:-**
 -
 
-First of all fill the required detail in the **.env** file as instructed. The packages used for running these scripts are mentioned in the **requirements.txt** file, install them in your environment before running running the scripts. 
+First of all fill the required detail in the **.env** in Basics folder file as instructed. The packages used for running these scripts are mentioned in the **requirements.txt** file, install them in your environment before running running the scripts. 
 After installing everything type:- **python manage.py runserver** to run the project. 
 
 - For searching the names of restaurants on a particular datetime after the local host address you need to enter the url as **/restaurants?datetime=dd-mm-yyyy H:M**. Time needs to be entered in **24hrs** format and date should be entered in **dd-mm-yyyy** format
