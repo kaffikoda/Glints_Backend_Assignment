@@ -172,17 +172,6 @@ class RestTimings(models.Model):
         db_table = 'rest_timings'
 
 
-class RestTimingss(models.Model):
-    restaurant = models.ForeignKey('RestaurantDetail', models.DO_NOTHING)
-    day_num = models.IntegerField()
-    opening_time = models.TimeField(blank=True, null=True)
-    closing_time = models.TimeField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'rest_timingss'
-
-
 class RestaurantDetail(models.Model):
     restaurant_id = models.AutoField(primary_key=True)
     restaurant_name = models.CharField(max_length=255)
@@ -191,21 +180,3 @@ class RestaurantDetail(models.Model):
     class Meta:
         managed = False
         db_table = 'restaurant_detail'
-
-
-class RestaurantDetails(models.Model):
-    restaurant_id = models.IntegerField(primary_key=True)
-    restaurant_name = models.CharField(max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'restaurant_details'
-
-
-class RestaurantDetailss(models.Model):
-    restaurant_id = models.AutoField(primary_key=True)
-    restaurant_name = models.CharField(max_length=255)
-
-    class Meta:
-        managed = False
-        db_table = 'restaurant_detailss'

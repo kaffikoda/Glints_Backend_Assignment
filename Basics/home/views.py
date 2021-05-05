@@ -8,67 +8,39 @@ from django.db import transaction
 from datetime import datetime
 
 
-def calculate_edit_distance(search_str, result_str):
-    search_str, result_str = search_str.lower(), result_str.lower()
-    length_of_search_str = len(search_str)
-    length_of_result_str = len(result_str)
+def calculate_edit_distance(search_str, result_str):  # through this function I am calculating edit distance of the
+    # search term to the name of the restaurant
+    search_str, result_str = search_str.lower(), result_str.lower()  # converting the string to lowercase
+    length_of_search_str = len(search_str)  # getting length of search term
+    length_of_result_str = len(result_str)  # getting length of restaurant name
 
-    dp_array = [[0 for x in range(0, length_of_search_str + 1)] for y in range(0, length_of_result_str + 1)]
+    dp_array = [[0 for x in range(0, length_of_search_str + 1)] for y in range(0, length_of_result_str + 1)]  #
+    # making a 2D array of dimension (length_of_result_str + 1) x (length_of_search_str + 1)
 
-    for i in range(0, length_of_search_str + 1):
+    for i in range(0, length_of_search_str + 1):  # initialising the dp_array
         dp_array[0][i] = i
 
-    for j in range(0, length_of_result_str + 1):
+    for j in range(0, length_of_result_str + 1):  # initialising the dp_array
         dp_array[j][0] = j
 
-    for i in range(1, length_of_result_str + 1):
+    for i in range(1, length_of_result_str + 1):  # assigning values to each combination od string
         for j in range(1, length_of_search_str + 1):
-            if result_str[i - 1] != search_str[j - 1]:
-                dp_array[i][j] = min(dp_array[i - 1][j], dp_array[i][j - 1], dp_array[i - 1][j - 1]) + 1
-            else:
+            if result_str[i - 1] != search_str[j - 1]:  # executes when two characters are not equal
+                dp_array[i][j] = min(dp_array[i - 1][j], dp_array[i][j - 1], dp_array[i - 1][
+                    j - 1]) + 1  # minimum steps of the 3 (insertion, deletion, replacement) and add 1 to it
+            else:  # executes when two characters are different
                 dp_array[i][j] = dp_array[i - 1][j - 1]
 
-    return dp_array[length_of_result_str][length_of_search_str]
+    return dp_array[length_of_result_str][length_of_search_str]  # returns the edit distance
 
 
 # Create your views here.
 def index(request):
-    # print(request)
-    context = {"variable": "var is the value"}
-    # return render(request, 'index.html', context)
-    return HttpResponse("This is the home page!!!!!")
-
-
-def about(request):
-    return HttpResponse("This is the about page!!!!!")
-
-
-def services(request):
-    return HttpResponse("This is the services page!!!!!")
-
-
-def contacts(request):
-    posts = CustomerDetails.objects.all()
-    print(posts)
-    return render(request, 'contacts.html', {'post': posts})
-    # return HttpResponse("This is contacts page!!!!!!!!!")
-
-
-# @api_view(['GET'])
-# def show_customer_details(request):
-#     print(request.query_params)
-#     # return HttpResponse('This is show customer details!!!!!!')
-#     if request.method == 'GET':
-#         obj = PurchaseHistory.objects.all()
-#         ser = serializing(obj, many=True)
-#         return Response(ser.data)
-    #     results = CustomerDetails.objects.all()
-    #     serialize = searialization_class(results, many=True)
-    #     return Response(serialize.data)
+    return HttpResponse("This is the index page!!!!!")
 
 
 @api_view(['GET'])
-def restaurants(request):       # it's function is to get the details of the restaurant according to the parameters
+def restaurants(request):  # it's function is to get the details of the restaurant according to the parameters
     # passed through url
     if request.method == 'GET' and request.GET.get('top') is None:  # this is executed when you want to get the
         # restaurants open on a particular datetime
@@ -78,25 +50,32 @@ def restaurants(request):       # it's function is to get the details of the res
         time = datetime.strptime(datetime_str, "%d-%m-%Y %H:%M").time()  # this helps us in getting the time part in
         # the datetime url
 
-        open_restaurants = RestTimingss.objects.filter(day_num=day_index, opening_time__lte=time, closing_time__gte=time)  # through this we get the restaurant id which are open during that time and day index
-        restaurant_detail = RestaurantDetail.objects.filter(restaurant_id__in=open_restaurants.values('restaurant'))  # through this we get the details of restaurant
-        restaurant_detail_serialized = searialize_restaurant_detail(restaurant_detail, many=True)  # here we do serialization to get the required data, i.e the name of the restaurants
+        open_restaurants = RestTimingss.objects.filter(day_num=day_index, opening_time__lte=time,
+                                                       closing_time__gte=time)  # through this we get the restaurant id which are open during that time and day index
+        restaurant_detail = RestaurantDetail.objects.filter(
+            restaurant_id__in=open_restaurants.values('restaurant'))  # through this we get the details of restaurant
+        restaurant_detail_serialized = searialize_restaurant_detail(restaurant_detail,
+                                                                    many=True)  # here we do serialization to get the required data, i.e the name of the restaurants
 
         return Response(restaurant_detail_serialized.data)
 
     elif request.method == 'GET' and request.GET.get('greater_than') is not None:
         price_range_list = request.GET.get('price_range').split('-')  # we get the price range parameters in a list
-        num_of_top_restaurants = int(request.GET.get('top'))  # to get the number of top restaurants the user wants to see
+        num_of_top_restaurants = int(
+            request.GET.get('top'))  # to get the number of top restaurants the user wants to see
         dishes_threshold = int(request.GET.get('greater_than'))  # to get the threshold above which the total dishes
         # in the given price range needs to be
         lower_price = float(price_range_list[0])  # to get the lower value in the price range
         higher_price = float(price_range_list[1])  # to get the greater value in the price range
 
-        menu_details = MenuDetails.objects.filter(menu_price__gte=lower_price, menu_price__lte=higher_price).values('restaurant').annotate(total_dishes_in_price_range=Count('dish_name')).filter(total_dishes_in_price_range__gt=dishes_threshold)
+        menu_details = MenuDetails.objects.filter(menu_price__gte=lower_price, menu_price__lte=higher_price).values(
+            'restaurant').annotate(total_dishes_in_price_range=Count('dish_name')).filter(
+            total_dishes_in_price_range__gt=dishes_threshold)
         # through this query we are getting the list of restaurants which have dishes more than the given threshold
         # in the given price range
 
-        restaurant_details = (RestaurantDetail.objects.filter(restaurant_id__in=menu_details.values('restaurant'))).order_by('-cash_balance')[:num_of_top_restaurants]
+        restaurant_details = (RestaurantDetail.objects.filter(
+            restaurant_id__in=menu_details.values('restaurant'))).order_by('-cash_balance')[:num_of_top_restaurants]
         # here we are getting the top restaurants according to the cash balance, i.e more the cash balance more will
         # be it's popularity
 
@@ -107,17 +86,21 @@ def restaurants(request):       # it's function is to get the details of the res
 
     elif request.method == 'GET' and request.GET.get('lesser_than') is not None:
         price_range_list = request.GET.get('price_range').split('-')  # we get the price range parameters in a list
-        num_of_top_restaurants = int(request.GET.get('top'))  # to get the number of top restaurants the user wants to see
+        num_of_top_restaurants = int(
+            request.GET.get('top'))  # to get the number of top restaurants the user wants to see
         dishes_threshold = int(request.GET.get('lesser_than'))  # to get the threshold below which the total dishes in
         # the given price range needs to be
         lower_price = float(price_range_list[0])  # to get the lower value in the price range
         higher_price = float(price_range_list[1])  # to get the greater value in the price range
 
-        menu_details = MenuDetails.objects.filter(menu_price__gte=lower_price, menu_price__lte=higher_price).values('restaurant').annotate(total_dishes_in_price_range=Count('dish_name')).filter(total_dishes_in_price_range__lt=dishes_threshold)
+        menu_details = MenuDetails.objects.filter(menu_price__gte=lower_price, menu_price__lte=higher_price).values(
+            'restaurant').annotate(total_dishes_in_price_range=Count('dish_name')).filter(
+            total_dishes_in_price_range__lt=dishes_threshold)
         # through this query we are getting the list of restaurants which have dishes less than the given threshold
         # in the given price range
 
-        restaurant_details = (RestaurantDetail.objects.filter(restaurant_id__in=menu_details.values('restaurant'))).order_by('-cash_balance')[:num_of_top_restaurants]
+        restaurant_details = (RestaurantDetail.objects.filter(
+            restaurant_id__in=menu_details.values('restaurant'))).order_by('-cash_balance')[:num_of_top_restaurants]
         # here we are getting the top restaurants according to the cash balance, i.e more the cash balance more will
         # be it's popularity
 
@@ -132,7 +115,9 @@ def relevant_restaurants(request):  # this helps use in getting restaurants rank
     restaurant_search_term = request.GET.get('name')  # this helps in getting the restaurant's name
     query_parameter = "%" + restaurant_search_term + "%"  # preparing the search term for the sql query
     if request.method == 'GET':
-        raw_sql_query = RestaurantDetail.objects.raw('SELECT restaurant_id, restaurant_name FROM restaurant_detail WHERE restaurant_name LIKE %s',[query_parameter])  # through this sql query we get the records of the restaurants which has the search
+        raw_sql_query = RestaurantDetail.objects.raw(
+            'SELECT restaurant_id, restaurant_name FROM restaurant_detail WHERE restaurant_name LIKE %s',
+            [query_parameter])  # through this sql query we get the records of the restaurants which has the search
         # term in their name
 
         edit_distance_dict = {}  # creating an empty dictionary to store the restaurant name as key and the edit
@@ -155,7 +140,9 @@ def relevant_dishes(request):  # this helps use in getting dishes ranked by rele
     dish_search_term = request.GET.get('name')  # this helps in getting the dish's name
     query_parameter = "%" + dish_search_term + "%"  # preparing the search term for the sql query
     if request.method == 'GET':
-        raw_sql_query = MenuDetails.objects.raw('SELECT DISTINCT(dish_name), menu_id FROM menu_details WHERE dish_name LIKE %s', [query_parameter])  # through this sql query we get the records of the dishes which has the search
+        raw_sql_query = MenuDetails.objects.raw(
+            'SELECT DISTINCT(dish_name), menu_id FROM menu_details WHERE dish_name LIKE %s',
+            [query_parameter])  # through this sql query we get the records of the dishes which has the search
         # term in their name
 
         edit_distance_dict = {}  # creating an empty dictionary to store the dish name as key and the edit distance
@@ -185,11 +172,14 @@ def place_order(request):  # this helps in placing the order
         user_info_queryset = CustomerDetails.objects.filter(customer_id=user_id)
         restaurant_details_query = RestaurantDetail.objects.filter(restaurant_name=restaurant_name)  # getting the
         # query set of the restaurant from where you want to place order
-        dish_and_restaurant_queryset = MenuDetails.objects.filter(dish_name=dish_name, restaurant__in=restaurant_details_query.values('restaurant_id'))  # getting the queryset of the dish in the restaurant
+        dish_and_restaurant_queryset = MenuDetails.objects.filter(dish_name=dish_name,
+                                                                  restaurant__in=restaurant_details_query.values(
+                                                                      'restaurant_id'))  # getting the queryset of the dish in the restaurant
 
         if len(user_info_queryset) == 1 and len(dish_and_restaurant_queryset) == 1:  # this executes only when the
             # userid is valid and the the dish is in the menu of the restaurant
-            if len(CustomerDetails.objects.filter(cash_balance__gte=dish_and_restaurant_queryset.values('menu_price')) & user_info_queryset) == 1:  # this executes only when the user's cash balance of the user is greater than equal to the price of the dish
+            if len(CustomerDetails.objects.filter(cash_balance__gte=dish_and_restaurant_queryset.values(
+                    'menu_price')) & user_info_queryset) == 1:  # this executes only when the user's cash balance of the user is greater than equal to the price of the dish
                 try:
                     with transaction.atomic():  # doing atomic transaction with the help of context manager
                         user_details = CustomerDetails.objects.get(customer_id=user_id)  # getting the user details
@@ -212,8 +202,10 @@ def place_order(request):  # this helps in placing the order
                                                                                 restaurant_name=restaurant_name,
                                                                                 transaction_amount=dish_and_restaurant_details.menu_price,
                                                                                 transaction_date=transaction_datetime)  # creating a new transaction record
-                        user_details.save(update_fields=['cash_balance'])  # saving the changes made in the cash balance of the user
-                        restaurant_details.save(update_fields=['cash_balance'])  # saving the changes made in the cash balance of the restaurant
+                        user_details.save(
+                            update_fields=['cash_balance'])  # saving the changes made in the cash balance of the user
+                        restaurant_details.save(update_fields=[
+                            'cash_balance'])  # saving the changes made in the cash balance of the restaurant
                         new_transaction_record.save()  # saving the new transaction
                         return Response("Transaction successful!")
                 except:
@@ -222,7 +214,3 @@ def place_order(request):  # this helps in placing the order
             # dish's price
         return Response("The dish is not present in the restaurant!")  # returned when the dish is not present in the
         # restaurant
-
-# @api_view(['GET'])
-# def show_purchase_history:
-

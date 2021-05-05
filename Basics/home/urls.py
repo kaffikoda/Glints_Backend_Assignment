@@ -19,10 +19,6 @@ from home import views as view1
 
 urlpatterns = [
     path("", view1.index, name='home'),
-    path("about", view1.about, name='about'),
-    path("services", view1.services, name='services'),
-    path("contacts", view1.contacts, name='contacts'),
-    # path("show", view1.show_customer_details, name='show_customer'),
     path("restaurants", view1.restaurants, name='show_restaurants'),
     path("relevant_restaurants", view1.relevant_restaurants, name="relevant_restaurants"),
     path("relevant_dishes", view1.relevant_dishes, name="relevant_dishes"),
